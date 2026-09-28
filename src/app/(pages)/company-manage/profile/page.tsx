@@ -1,4 +1,4 @@
-export default function CompanyProfile() {
+export default function Page() {
   return (
     <>
       {/* Thông tin công ty */}
