@@ -69,7 +69,7 @@ textarea {
 }
 
 .card-item .inner-body {
-  /* background-image: url("../images/bg-card.svg"); */
+  background-image: url("/assets/images/bg-card.svg");
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: top left;
