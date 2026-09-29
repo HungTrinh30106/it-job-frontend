@@ -24,16 +24,19 @@ export const HeaderAccount = () => {
     <>
       <div className="font-[600] sm:text-[16px] text-[12px] text-white relative group/sub-1">
         {/* Chưa đăng nhập */}
-        {/* <Link href="/" className="text-[16px] font-[600] text-white">
+        <Link href="/user/login" className="text-[16px] font-[600] text-white">
           ĐĂNG NHẬP
         </Link>
         <span className="text-white"> / </span>
-        <Link href="/" className="text-[16px] font-[600] text-white">
+        <Link
+          href="/user/register"
+          className="text-[16px] font-[600] text-white"
+        >
           ĐĂNG KÝ
-        </Link> */}
+        </Link>
 
         {/* Đã đăng nhập */}
-        <Link href="" className="">
+        {/* <Link href="" className="">
           LG Elect...
         </Link>
         <ul className="w-[180px] bg-[#000065] rounded-[4px] absolute top-[100%] right-0 hidden group-hover/sub-1:block">
@@ -50,7 +53,7 @@ export const HeaderAccount = () => {
               </Link>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </div>
     </>
   );

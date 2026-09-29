@@ -8,8 +8,6 @@ import { useState } from "react";
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
 
-  console.log("openMenu", openMenu);
-
   return (
     <>
       <header className="bg-[#000071] py-[15px]">

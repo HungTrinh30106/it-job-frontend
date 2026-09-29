@@ -85,3 +85,10 @@ textarea {
   box-shadow: 0px 4px 20px 0px #0000000f;
 }
 /* End Filter */
+
+/* Validate */
+.just-validate-error-label,
+.just-validate-success-label {
+  font-size: 13px;
+}
+/* End validate */
