@@ -1,8 +1,12 @@
 "use client";
 import JustValidate from "just-validate";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function Page() {
+  const router = useRouter();
+
   useEffect(() => {
     const validator = new JustValidate("#registerForm");
 
@@ -92,15 +96,16 @@ export default function Page() {
           .then((res) => res.json())
           .then((data) => {
             if (data.code == "error") {
-              alert(data.message);
+              toast.error(data.message);
             }
             if (data.code == "success") {
-              alert(data.message);
-              // Chuyển hướng đến trang đăng nhập
+              toast.success(data.message);
+              router.push("/user/login");
             }
           })
           .catch((error) => {
-            console.error(error);
+            toast.error("Đã có lỗi xảy ra, vui lòng thử lại sau!");
+            console.log(error);
           });
       });
   }, []);
