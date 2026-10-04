@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
-  const { isLogin, infoUser } = useAuth();
+  const { isLogin, infoUser, infoCompany } = useAuth();
 
   return (
     <>
@@ -22,7 +22,11 @@ export const Header = () => {
               28.ITJobs
             </Link>
             <HeaderMenu openMenu={openMenu} />
-            <HeaderAccount isLogin={isLogin} infoUser={infoUser} />
+            <HeaderAccount
+              isLogin={isLogin}
+              infoUser={infoUser}
+              infoCompany={infoCompany}
+            />
             <button
               onClick={() => setOpenMenu(!openMenu)}
               className="text-[20px] text-white lg:hidden ml-[12px]"

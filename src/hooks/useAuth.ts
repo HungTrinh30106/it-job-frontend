@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export const useAuth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [infoUser, setInfoUser] = useState<any>(null);
+  const [infoCompany, setInfoCompany] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -17,7 +18,14 @@ export const useAuth = () => {
         }
         if (data.code == "success") {
           setIsLogin(true);
-          setInfoUser(data.infoUser);
+          if (data.infoUser) {
+            setInfoUser(data.infoUser);
+            setInfoCompany(null); // Nếu là user thì xóa thông tin công ty
+          }
+          if (data.infoCompany) {
+            setInfoCompany(data.infoCompany);
+            setInfoUser(null); // Nếu là công ty thì xóa thông tin user
+          }
         }
       })
       .catch((error) => {
@@ -28,5 +36,6 @@ export const useAuth = () => {
   return {
     isLogin: isLogin,
     infoUser: infoUser,
+    infoCompany: infoCompany,
   };
 };
