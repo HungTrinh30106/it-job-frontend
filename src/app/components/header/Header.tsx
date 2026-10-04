@@ -4,9 +4,11 @@ import { FaBars } from "react-icons/fa6";
 import { HeaderMenu } from "./HeaderMenu";
 import { HeaderAccount } from "./HeaderAccount";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const { isLogin, infoUser } = useAuth();
 
   return (
     <>
@@ -20,7 +22,7 @@ export const Header = () => {
               28.ITJobs
             </Link>
             <HeaderMenu openMenu={openMenu} />
-            <HeaderAccount />
+            <HeaderAccount isLogin={isLogin} infoUser={infoUser} />
             <button
               onClick={() => setOpenMenu(!openMenu)}
               className="text-[20px] text-white lg:hidden ml-[12px]"

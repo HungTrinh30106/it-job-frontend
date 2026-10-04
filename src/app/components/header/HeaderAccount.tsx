@@ -1,6 +1,8 @@
 import Link from "next/link";
 
-export const HeaderAccount = () => {
+export const HeaderAccount = (props: { isLogin: boolean; infoUser: any }) => {
+  const { isLogin, infoUser } = props;
+
   const companyMenu = [
     {
       name: "Thông tin công ty",
@@ -20,40 +22,71 @@ export const HeaderAccount = () => {
     },
   ];
 
+  const userMenu = [
+    {
+      name: "Thông tin cá nhân",
+      link: "#",
+    },
+    {
+      name: "Quản lý CV đã gửi",
+      link: "#",
+    },
+    {
+      name: "Đăng xuất",
+      link: "/logout",
+    },
+  ];
+
   return (
     <>
       <div className="font-[600] sm:text-[16px] text-[12px] text-white relative group/sub-1">
-        {/* Chưa đăng nhập */}
-        <Link href="/user/login" className="text-[16px] font-[600] text-white">
-          ĐĂNG NHẬP
-        </Link>
-        <span className="text-white"> / </span>
-        <Link
-          href="/user/register"
-          className="text-[16px] font-[600] text-white"
-        >
-          ĐĂNG KÝ
-        </Link>
-
-        {/* Đã đăng nhập */}
-        {/* <Link href="" className="">
-          LG Elect...
-        </Link>
-        <ul className="w-[180px] bg-[#000065] rounded-[4px] absolute top-[100%] right-0 hidden group-hover/sub-1:block">
-          {companyMenu.map((item) => (
-            <li
-              key={item.name}
-              className="py-[10px] px-[16px] rounded-[4px] hover:bg-[#000096]"
-            >
-              <Link
-                href={item.link}
-                className="font-[600] text-[16px] text-white"
-              >
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul> */}
+        {isLogin ? (
+          <>
+            {/* Đã đăng nhập vào user */}
+            <Link href="" className="">
+              {infoUser.fullName}
+            </Link>
+            <ul className="w-[180px] bg-[#000065] rounded-[4px] absolute top-[100%] right-0 hidden group-hover/sub-1:block">
+              {userMenu.map((item, index) => (
+                <li
+                  key={index}
+                  className="py-[10px] px-[16px] rounded-[4px] hover:bg-[#000096]"
+                >
+                  <Link
+                    href={item.link}
+                    className="font-[600] text-[16px] text-white"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {/* Đã đăng nhập vào company */}
+            {/* <Link href="" className="">
+            LG Elect...
+          </Link>
+          <ul className="w-[180px] bg-[#000065] rounded-[4px] absolute top-[100%] right-0 hidden group-hover/sub-1:block">
+            {companyMenu.map((item, index) => (
+              <li key={index} className="py-[10px] px-[16px] rounded-[4px] hover:bg-[#000096]">
+                <Link href={item.link} className="font-[600] text-[16px] text-white">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul> */}
+          </>
+        ) : (
+          <>
+            {/* Chưa đăng nhập */}
+            <Link href="/user/login" className="">
+              Đăng Nhập
+            </Link>
+            <span className="">/</span>
+            <Link href="/user/register" className="">
+              Đăng Ký
+            </Link>
+          </>
+        )}
       </div>
     </>
   );

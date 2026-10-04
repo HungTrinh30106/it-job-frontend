@@ -54,10 +54,10 @@ export const HeaderMenu = (props: { openMenu: boolean }) => {
     },
     {
       name: "Nhà tuyển dụng",
-      link: "#",
+      link: "/company/login",
       children: [
-        { name: "Đăng nhập", link: "#" },
-        { name: "Đăng ký", link: "#" },
+        { name: "Đăng nhập", link: "/company/login" },
+        { name: "Đăng ký", link: "/company/register" },
       ],
     },
   ];
