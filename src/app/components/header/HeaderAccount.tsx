@@ -22,18 +22,18 @@ export const HeaderAccount = (props: {
     },
     {
       name: "Đăng xuất",
-      link: "#",
+      link: "/logout",
     },
   ];
 
   const userMenu = [
     {
       name: "Thông tin cá nhân",
-      link: "#",
+      link: "/user-manage/profile",
     },
     {
       name: "Quản lý CV đã gửi",
-      link: "#",
+      link: "/user-manage/resumes",
     },
     {
       name: "Đăng xuất",

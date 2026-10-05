@@ -92,3 +92,18 @@ textarea {
   font-size: 13px;
 }
 /* End validate */
+
+/* FilePond */
+.filepond--credits {
+  display: none;
+}
+
+.filepond--file-action-button {
+  background-color: #ff0000ad;
+}
+
+.filepond--drop-label.filepond--drop-label label {
+  font-size: 50px;
+  font-weight: 200;
+}
+/* End FilePond */
