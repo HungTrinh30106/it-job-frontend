@@ -7,8 +7,22 @@ import { toast } from "sonner";
 
 export default function Page() {
   const { infoCompany } = useAuth();
-  const [logos, setLogos] = useState<any[]>([]);
+  const [logos, setLogos] = useState<any>([]);
   const [isValid, setIsValid] = useState(false);
+  const [cityList, setCityList] = useState<any>([]);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/city/list`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.code == "success") {
+          setCityList(data.cityList);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     if (infoCompany) {
@@ -152,15 +166,22 @@ export default function Page() {
                   >
                     Thành phố
                   </label>
-                  <select
-                    name="city"
-                    id="city"
-                    className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-                  >
-                    <option value="">Hà Nội</option>
-                    <option value="">Đà Nẵng</option>
-                    <option value="">Hồ Chí Minh</option>
-                  </select>
+                  {cityList.length > 0 && (
+                    <select
+                      name="city"
+                      id="city"
+                      className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+                      defaultValue={infoCompany.city}
+                    >
+                      {cityList.map((item: any) => {
+                        return (
+                          <option key={item._id} value={item._id}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  )}
                 </div>
                 <div className="">
                   <label

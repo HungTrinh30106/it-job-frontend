@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 export default function Page() {
   const { infoUser } = useAuth();
-  const [avatars, setAvatars] = useState<any[]>([]);
+  const [avatars, setAvatars] = useState<any>([]);
   const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
