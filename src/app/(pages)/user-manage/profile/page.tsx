@@ -1,22 +1,27 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
+import { FileUpload } from "@/app/components/uploadFile/FileUpload";
 import JustValidate from "just-validate";
 import { useEffect, useState } from "react";
-import { FilePond, registerPlugin } from "react-filepond";
-import "filepond/dist/filepond.min.css";
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-
-registerPlugin(FilePondPluginFileValidateType, FilePondPluginImagePreview);
+import { toast } from "sonner";
 
 export default function Page() {
   const { infoUser } = useAuth();
-  const [avatars, setAvatars] = useState<any>([]);
+  const [avatars, setAvatars] = useState<any[]>([]);
   const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
     if (infoUser) {
+      // Hiển thị avatar mặc định
+      if (infoUser.avatar) {
+        setAvatars([
+          {
+            source: infoUser.avatar,
+          },
+        ]);
+      }
+
+      //validate dữ liệu
       const validator = new JustValidate("#profileForm");
 
       validator
@@ -63,10 +68,26 @@ export default function Page() {
       const phone = event.target.phone.value;
       const avatar = avatars.length > 0 ? avatars[0].file : null;
 
-      console.log(fullName);
-      console.log(email);
-      console.log(phone);
-      console.log(avatar);
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("avatar", avatar);
+
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
+        method: "PATCH",
+        body: formData,
+        credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            toast.error(data.message);
+          }
+          if (data.code == "success") {
+            toast.success(data.message);
+          }
+        });
     }
   };
 
@@ -139,13 +160,11 @@ export default function Page() {
                     >
                       Avatar
                     </label>
-                    <FilePond
-                      name="avatar"
-                      labelIdle="+"
-                      acceptedFileTypes={["image/*"]}
-                      allowImagePreview={true}
+                    <FileUpload
                       files={avatars}
-                      onupdatefiles={setAvatars}
+                      labelIdle="+"
+                      onUpdateFiles={setAvatars}
+                      name="avatar"
                     />
                   </div>
                   <div className="sm:col-span-2">
