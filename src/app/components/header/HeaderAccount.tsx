@@ -10,15 +10,15 @@ export const HeaderAccount = (props: {
   const companyMenu = [
     {
       name: "Thông tin công ty",
-      link: "#",
+      link: "/company-manage/profile",
     },
     {
       name: "Quản lý công việc",
-      link: "#",
+      link: "/company-manage/job",
     },
     {
       name: "Quản lý CV",
-      link: "#",
+      link: "/company-manage/cv",
     },
     {
       name: "Đăng xuất",
