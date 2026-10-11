@@ -2,14 +2,16 @@
 import { useAuth } from "@/hooks/useAuth";
 import { FileUpload } from "@/app/components/uploadFile/FileUpload";
 import JustValidate from "just-validate";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { EditorMCE } from "@/app/components/editor/EditorMCE";
 
 export default function Page() {
   const { infoCompany } = useAuth();
   const [logos, setLogos] = useState<any>([]);
   const [isValid, setIsValid] = useState(false);
   const [cityList, setCityList] = useState<any>([]);
+  const editorRef = useRef<any>(null);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/city/list`, {
@@ -17,7 +19,6 @@ export default function Page() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.code == "success") {
           setCityList(data.cityList);
         }
@@ -82,7 +83,9 @@ export default function Page() {
       const workOverTime = event.target.workOverTime.value;
       const email = event.target.email.value;
       const phone = event.target.phone.value;
-      const description = event.target.description.value;
+      const description = editorRef.current
+        ? editorRef.current.getContent()
+        : "";
 
       const formData = new FormData();
       formData.append("companyName", companyName);
@@ -295,11 +298,9 @@ export default function Page() {
                   >
                     Mô tả chi tiết
                   </label>
-                  <textarea
-                    name="description"
-                    id="description"
-                    className="w-[100%] h-[350px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-                    defaultValue={infoCompany.description}
+                  <EditorMCE
+                    editorRef={editorRef}
+                    value={infoCompany.description}
                   />
                 </div>
                 <div className="sm:col-span-2">
