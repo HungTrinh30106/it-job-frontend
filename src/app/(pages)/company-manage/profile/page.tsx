@@ -301,6 +301,7 @@ export default function Page() {
                   <EditorMCE
                     editorRef={editorRef}
                     value={infoCompany.description}
+                    id="description"
                   />
                 </div>
                 <div className="sm:col-span-2">

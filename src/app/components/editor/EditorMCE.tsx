@@ -1,10 +1,15 @@
 import { Editor } from "@tinymce/tinymce-react";
 
-export const EditorMCE = (props: { value?: string; editorRef: any }) => {
-  const { value = "", editorRef } = props;
+export const EditorMCE = (props: {
+  value?: string;
+  editorRef: any;
+  id: string;
+}) => {
+  const { value = "", editorRef, id = "" } = props;
   return (
     <>
       <Editor
+        id={id}
         apiKey={process.env.NEXT_PUBLIC_API_TINYMCE}
         init={{
           plugins:

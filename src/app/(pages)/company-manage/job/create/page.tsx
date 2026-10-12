@@ -1,6 +1,112 @@
+"use client";
+
+import { EditorMCE } from "@/app/components/editor/EditorMCE";
+import { FileUpload } from "@/app/components/uploadFile/FileUpload";
+import JustValidate from "just-validate";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { positionList, workingFormList } from "@/config/variable";
 
 export default function Page() {
+  const editorRef = useRef<any>(null);
+  const [images, setImages] = useState<any>([]);
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    //validate dữ liệu
+    const validator = new JustValidate("#jobCreateForm");
+
+    validator
+      .addField("#title", [
+        {
+          rule: "required",
+          errorMessage: "Vui lòng nhập tên công việc!",
+        },
+        {
+          rule: "maxLength",
+          value: 500,
+          errorMessage: "Tên công ty không được vượt quá 500 ký tự!",
+        },
+      ])
+      .addField("#salaryMin", [
+        {
+          rule: "minNumber",
+          value: 0,
+          errorMessage: "Mức lương tối thiểu phải lớn hơn hoặc bằng 0!",
+        },
+      ])
+      .addField("#salaryMax", [
+        {
+          rule: "minNumber",
+          value: 0,
+          errorMessage: "Mức lương tối đa phải lớn hơn hoặc bằng 0!",
+        },
+      ])
+      .onFail(() => {
+        setIsValid(false);
+      })
+      .onSuccess(() => {
+        setIsValid(true);
+      });
+  }, []);
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    if (isValid) {
+      const title = event.target.title.value;
+      let salaryMin = event.target.salaryMin.value;
+      if (salaryMin) {
+        salaryMin = parseInt(salaryMin);
+      } else {
+        salaryMin = 0;
+      }
+      let salaryMax = event.target.salaryMax.value;
+      if (salaryMax) {
+        salaryMax = parseInt(salaryMax);
+      } else {
+        salaryMax = 0;
+      }
+      const position = event.target.position.value;
+      const workingForm = event.target.workingForm.value;
+      const technologies = event.target.technologies.value;
+      const description = editorRef.current
+        ? editorRef.current.getContent()
+        : "";
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("salaryMin", salaryMin);
+      formData.append("salaryMax", salaryMax);
+      formData.append("position", position);
+      formData.append("workingForm", workingForm);
+      formData.append("technologies", technologies);
+      formData.append("description", description);
+
+      for (const item of images) {
+        formData.append("images", item.file);
+      }
+
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/job/create`, {
+        method: "POST",
+        body: formData,
+        credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            toast.error(data.message);
+          }
+          if (data.code == "success") {
+            toast.success(data.message);
+            // Xóa dữ liệu trong form
+            event.target.reset();
+            setImages([]);
+          }
+        });
+    }
+  };
+
   return (
     <>
       {/* Thêm mới công việc */}
@@ -12,7 +118,7 @@ export default function Page() {
                 Thêm mới công việc
               </h1>
               <Link
-                href="#"
+                href="/company-manage/job/list"
                 className="font-[400] text-[14px] text-[#0088FF] underline"
               >
                 Quay lại danh sách
@@ -20,6 +126,8 @@ export default function Page() {
             </div>
             <form
               action=""
+              id="jobCreateForm"
+              onSubmit={handleSubmit}
               className="grid sm:grid-cols-2 grid-cols-1 gap-x-[20px] gap-y-[15px]"
             >
               <div className="sm:col-span-2">
@@ -31,7 +139,7 @@ export default function Page() {
                 </label>
                 <input
                   type="text"
-                  name=""
+                  name="title"
                   id="title"
                   className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
                 />
@@ -45,7 +153,7 @@ export default function Page() {
                 </label>
                 <input
                   type="number"
-                  name=""
+                  name="salaryMin"
                   id="salaryMin"
                   className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
                 />
@@ -59,7 +167,7 @@ export default function Page() {
                 </label>
                 <input
                   type="number"
-                  name=""
+                  name="salaryMax"
                   id="salaryMax"
                   className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
                 />
@@ -69,19 +177,18 @@ export default function Page() {
                   htmlFor="position"
                   className="block font-[500] text-[14px] text-black mb-[5px]"
                 >
-                  Cấp bậc *
+                  Cấp bậc
                 </label>
                 <select
-                  name=""
+                  name="position"
                   id="position"
                   className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
                 >
-                  <option value="">Intern</option>
-                  <option value="">Fresher</option>
-                  <option value="">Junior</option>
-                  <option value="">Middle</option>
-                  <option value="">Senior</option>
-                  <option value="">Manager</option>
+                  {positionList.map((item: any, index: number) => (
+                    <option value={item.value} key={index}>
+                      {item.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="">
@@ -89,16 +196,18 @@ export default function Page() {
                   htmlFor="workingForm"
                   className="block font-[500] text-[14px] text-black mb-[5px]"
                 >
-                  Hình thức làm việc *
+                  Hình thức làm việc
                 </label>
                 <select
-                  name=""
+                  name="workingForm"
                   id="workingForm"
                   className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
                 >
-                  <option value="">Tại văn phòng</option>
-                  <option value="">Làm từ xa</option>
-                  <option value="">Linh hoạt</option>
+                  {workingFormList.map((item: any, index: number) => (
+                    <option value={item.value} key={index}>
+                      {item.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="sm:col-span-2">
@@ -110,7 +219,7 @@ export default function Page() {
                 </label>
                 <input
                   type="text"
-                  name=""
+                  name="technologies"
                   id="technologies"
                   className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
                 />
@@ -120,15 +229,16 @@ export default function Page() {
                   htmlFor="images"
                   className="block font-[500] text-[14px] text-black mb-[5px]"
                 >
-                  Danh sách ảnh *
+                  Danh sách ảnh
                 </label>
-                <input
-                  type="file"
-                  name=""
-                  id="images"
-                  accept="image/*"
-                  multiple
-                  className=""
+                <FileUpload
+                  files={images}
+                  labelIdle="+"
+                  onUpdateFiles={setImages}
+                  name="image"
+                  allowMultiple={true}
+                  maxFiles={3}
+                  allowReorder={true}
                 />
               </div>
               <div className="sm:col-span-2">
@@ -138,12 +248,7 @@ export default function Page() {
                 >
                   Mô tả chi tiết
                 </label>
-                <textarea
-                  name=""
-                  id="description"
-                  className="w-[100%] h-[350px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-                  defaultValue={""}
-                />
+                <EditorMCE editorRef={editorRef} id="description" />
               </div>
               <div className="sm:col-span-2">
                 <button className="bg-[#0088FF] rounded-[4px] h-[48px] px-[20px] font-[700] text-[16px] text-white cursor-pointer">

@@ -14,6 +14,9 @@ interface FileUploadProps {
   name?: string;
   labelIdle: string;
   acceptedFileTypes?: string[];
+  allowMultiple?: boolean;
+  maxFiles?: number | null;
+  allowReorder?: boolean;
 }
 
 export const FileUpload = ({
@@ -22,6 +25,9 @@ export const FileUpload = ({
   name = "avatar",
   labelIdle = "+",
   acceptedFileTypes = ["image/*"],
+  allowMultiple = false,
+  maxFiles = null,
+  allowReorder = false,
 }: FileUploadProps) => {
   return (
     <FilePond
@@ -30,6 +36,9 @@ export const FileUpload = ({
       name={name}
       labelIdle={labelIdle}
       acceptedFileTypes={acceptedFileTypes}
+      allowMultiple={allowMultiple}
+      maxFiles={maxFiles}
+      allowReorder={allowReorder}
     />
   );
 };

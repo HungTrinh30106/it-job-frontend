@@ -14,11 +14,11 @@ export const HeaderAccount = (props: {
     },
     {
       name: "Quản lý công việc",
-      link: "/company-manage/job",
+      link: "/company-manage/job/list",
     },
     {
       name: "Quản lý CV",
-      link: "/company-manage/cv",
+      link: "/company-manage/cv/list",
     },
     {
       name: "Đăng xuất",
