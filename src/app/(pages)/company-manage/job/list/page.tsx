@@ -1,16 +1,21 @@
 "use client";
 
+import { Pagination } from "@/app/components/pagination/Pagination";
 import { positionList, workingFormList } from "@/config/variable";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBriefcase, FaUserTie } from "react-icons/fa";
 import { toast } from "sonner";
 
 export default function Page() {
   const [jobList, setJobList] = useState([]);
+  const [pagination, setPagination] = useState<any>(null);
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") || "1";
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/job/list`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/job/list?page=${page}`, {
       credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
     })
       .then((res) => res.json())
@@ -20,11 +25,10 @@ export default function Page() {
         }
         if (data.code == "success") {
           setJobList(data.jobs);
+          setPagination(data.pagination);
         }
       });
-  }, []);
-
-  console.log(jobList);
+  }, [page]);
 
   return (
     <>
@@ -104,17 +108,10 @@ export default function Page() {
               );
             })}
           </div>
-          <div className="mt-[30px]">
-            <select
-              name=""
-              id=""
-              className="bg-white border-[1px] border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
-            >
-              <option value="">Trang 1</option>
-              <option value="">Trang 2</option>
-              <option value="">Trang 3</option>
-            </select>
-          </div>
+          <Pagination
+            pagination={pagination}
+            totalItemInPage={jobList.length}
+          />
         </div>
       </div>
       {/* Hết Quản lý công việc */}
