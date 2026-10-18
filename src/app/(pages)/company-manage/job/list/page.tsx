@@ -91,7 +91,7 @@ export default function Page() {
                     </div>
                     <div className="mt-[20px] flex justify-center gap-[12px]">
                       <Link
-                        href="#"
+                        href={`/company-manage/job/edit/${item.id}`}
                         className="bg-[#FFB200] text-black rounded-[4px] py-[8px] px-[20px] font-[400] text-[14px] inline-block"
                       >
                         Sửa

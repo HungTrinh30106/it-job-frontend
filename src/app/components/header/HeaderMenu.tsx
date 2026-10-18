@@ -87,7 +87,7 @@ export const HeaderMenu = (props: { openMenu: boolean }) => {
           lg:hover:[&>ul]:block
           ${
             level === 1
-              ? "lg:inline-flex lg:items-center lg:gap-x-2"
+              ? "lg:inline-flex lg:w-auto lg:shrink-0 lg:items-center lg:gap-x-2"
               : "lg:px-4 lg:py-2.5 lg:rounded lg:flex lg:items-center lg:justify-between lg:hover:bg-[#000096]"
           }
 
@@ -106,7 +106,7 @@ export const HeaderMenu = (props: { openMenu: boolean }) => {
         >
           <Link
             href={item.link}
-            className="text-[15px] lg:text-[16px] font-[600] text-white hover:text-blue-200 transition-colors flex-1"
+            className="text-[15px] lg:text-[16px] font-[600] text-white hover:text-blue-200 transition-colors flex-1 lg:whitespace-nowrap"
           >
             {item.name}
           </Link>
@@ -148,7 +148,6 @@ export const HeaderMenu = (props: { openMenu: boolean }) => {
 
               /* Style cho Mobile (Accordion xổ xuống dạng cây) */
               ${isOpenMobile ? "block" : "hidden"} 
-              lg:group-hover:block
               pl-4 lg:pl-0 my-1 lg:my-0
             `}
           >
