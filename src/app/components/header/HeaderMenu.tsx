@@ -10,8 +10,8 @@ type MenuItem = {
   children?: MenuItem[];
 };
 
-export const HeaderMenu = (props: { openMenu: boolean }) => {
-  const { openMenu } = props;
+export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
+  const { openMenu, isLogin } = props;
 
   const menuList: MenuItem[] = [
     {
@@ -22,24 +22,21 @@ export const HeaderMenu = (props: { openMenu: boolean }) => {
           name: "Việc làm IT theo kỹ năng",
           link: "#",
           children: [
-            { name: "ReactJS", link: "#" },
-            { name: "NodeJS", link: "#" },
-            { name: "Javascript", link: "#" },
-            { name: "HTML5", link: "#" },
-            { name: "CSS3", link: "#" },
-          ],
-        },
-        {
-          name: "Việc làm IT theo công ty",
-          link: "#",
-          children: [
-            { name: "FPT Software", link: "#" },
-            { name: "Vietnamobile", link: "#" },
+            { name: "ReactJS", link: "/search?language=ReactJS" },
+            { name: "NodeJS", link: "/search?language=NodeJS" },
+            { name: "Javascript", link: "/search?language=Javascript" },
+            { name: "HTML5", link: "/search?language=HTML5" },
+            { name: "CSS3", link: "/search?language=CSS3" },
           ],
         },
         {
           name: "Việc làm IT theo thành phố",
           link: "#",
+          children: [
+            { name: "Hà Nội", link: "/search?city=Hà Nội" },
+            { name: "Hồ Chí Minh", link: "/search?city=Hồ Chí Minh" },
+            { name: "Đà Nẵng", link: "/search?city=Đà Nẵng" },
+          ],
         },
       ],
     },
@@ -47,19 +44,25 @@ export const HeaderMenu = (props: { openMenu: boolean }) => {
       name: "Top công ty IT",
       link: "#",
       children: [
-        { name: "FPT Software", link: "#" },
-        { name: "Techcombank", link: "#" },
-        { name: "MB Bank", link: "#" },
+        { name: "FPT Software", link: "/search?company=FPT Software" },
+        { name: "Techcombank", link: "/search?company=Techcombank" },
+        { name: "MB Bank", link: "/search?company=MB Bank" },
+        { name: "Vingroup", link: "/search?company=Vingroup" },
+        { name: "Viettel", link: "/search?company=Viettel" },
       ],
     },
-    {
-      name: "Nhà tuyển dụng",
-      link: "/company/login",
-      children: [
-        { name: "Đăng nhập", link: "/company/login" },
-        { name: "Đăng ký", link: "/company/register" },
-      ],
-    },
+    ...(!isLogin
+      ? [
+          {
+            name: "Nhà tuyển dụng",
+            link: "/company/login",
+            children: [
+              { name: "Đăng nhập", link: "/company/login" },
+              { name: "Đăng ký", link: "/company/register" },
+            ],
+          },
+        ]
+      : []),
   ];
 
   const MenuItemComponent = ({

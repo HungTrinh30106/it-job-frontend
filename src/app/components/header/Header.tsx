@@ -21,7 +21,7 @@ export const Header = () => {
             >
               28.ITJobs
             </Link>
-            <HeaderMenu openMenu={openMenu} />
+            <HeaderMenu openMenu={openMenu} isLogin={isLogin} />
             <HeaderAccount
               isLogin={isLogin}
               infoUser={infoUser}
