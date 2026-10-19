@@ -9,10 +9,10 @@ import { positionList, workingFormList } from "@/config/variable";
 
 export const JobEditForm = (props: { id: string }) => {
   const { id } = props;
-  console.log(id);
   const editorRef = useRef<any>(null);
   const [images, setImages] = useState<any>([]);
   const [isValid, setIsValid] = useState(false);
+  const [jobDetail, setJobDetail] = useState<any>(null);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/job/detail/${id}`, {
@@ -24,48 +24,60 @@ export const JobEditForm = (props: { id: string }) => {
           toast.error(data.message);
         }
         if (data.code == "success") {
-          console.log(data);
+          setJobDetail(data.jobDetail);
         }
       });
   }, [id]);
 
   useEffect(() => {
-    //validate dữ liệu
-    const validator = new JustValidate("#jobEditForm");
+    if (jobDetail) {
+      // Hiển thị ảnh mặc định
+      if (jobDetail.images && jobDetail.images.length > 0) {
+        const imageDefault = jobDetail.images.map((item: string) => {
+          return {
+            source: item,
+          };
+        });
+        setImages(imageDefault);
+      }
 
-    validator
-      .addField("#title", [
-        {
-          rule: "required",
-          errorMessage: "Vui lòng nhập tên công việc!",
-        },
-        {
-          rule: "maxLength",
-          value: 500,
-          errorMessage: "Tên công ty không được vượt quá 500 ký tự!",
-        },
-      ])
-      .addField("#salaryMin", [
-        {
-          rule: "minNumber",
-          value: 0,
-          errorMessage: "Mức lương tối thiểu phải lớn hơn hoặc bằng 0!",
-        },
-      ])
-      .addField("#salaryMax", [
-        {
-          rule: "minNumber",
-          value: 0,
-          errorMessage: "Mức lương tối đa phải lớn hơn hoặc bằng 0!",
-        },
-      ])
-      .onFail(() => {
-        setIsValid(false);
-      })
-      .onSuccess(() => {
-        setIsValid(true);
-      });
-  }, []);
+      //validate dữ liệu
+      const validator = new JustValidate("#jobEditForm");
+
+      validator
+        .addField("#title", [
+          {
+            rule: "required",
+            errorMessage: "Vui lòng nhập tên công việc!",
+          },
+          {
+            rule: "maxLength",
+            value: 500,
+            errorMessage: "Tên công ty không được vượt quá 500 ký tự!",
+          },
+        ])
+        .addField("#salaryMin", [
+          {
+            rule: "minNumber",
+            value: 0,
+            errorMessage: "Mức lương tối thiểu phải lớn hơn hoặc bằng 0!",
+          },
+        ])
+        .addField("#salaryMax", [
+          {
+            rule: "minNumber",
+            value: 0,
+            errorMessage: "Mức lương tối đa phải lớn hơn hoặc bằng 0!",
+          },
+        ])
+        .onFail(() => {
+          setIsValid(false);
+        })
+        .onSuccess(() => {
+          setIsValid(true);
+        });
+    }
+  }, [jobDetail]);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -103,160 +115,169 @@ export const JobEditForm = (props: { id: string }) => {
         formData.append("images", item.file);
       }
 
-      // fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/job/create`, {
-      //   method: "POST",
-      //   body: formData,
-      //   credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     if (data.code == "error") {
-      //       toast.error(data.message);
-      //     }
-      //     if (data.code == "success") {
-      //       toast.success(data.message);
-      //       // Xóa dữ liệu trong form
-      //       event.target.reset();
-      //       setImages([]);
-      //     }
-      //   });
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/job/edit/${id}`, {
+        method: "PATCH",
+        body: formData,
+        credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            toast.error(data.message);
+          }
+          if (data.code == "success") {
+            toast.success(data.message);
+          }
+        });
     }
   };
 
   return (
     <>
-      <form
-        action=""
-        id="jobEditForm"
-        onSubmit={handleSubmit}
-        className="grid sm:grid-cols-2 grid-cols-1 gap-x-[20px] gap-y-[15px]"
-      >
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="title"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Tên công việc *
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-          />
-        </div>
-        <div className="">
-          <label
-            htmlFor="salaryMin"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Mức lương tối thiểu ($)
-          </label>
-          <input
-            type="number"
-            name="salaryMin"
-            id="salaryMin"
-            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-          />
-        </div>
-        <div className="">
-          <label
-            htmlFor="salaryMax"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Mức lương tối đa ($)
-          </label>
-          <input
-            type="number"
-            name="salaryMax"
-            id="salaryMax"
-            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-          />
-        </div>
-        <div className="">
-          <label
-            htmlFor="position"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Cấp bậc
-          </label>
-          <select
-            name="position"
-            id="position"
-            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-          >
-            {positionList.map((item: any, index: number) => (
-              <option value={item.value} key={index}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="">
-          <label
-            htmlFor="workingForm"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Hình thức làm việc
-          </label>
-          <select
-            name="workingForm"
-            id="workingForm"
-            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-          >
-            {workingFormList.map((item: any, index: number) => (
-              <option value={item.value} key={index}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="technologies"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Các công nghệ
-          </label>
-          <input
-            type="text"
-            name="technologies"
-            id="technologies"
-            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-          />
-        </div>
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="images"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Danh sách ảnh
-          </label>
-          <FileUpload
-            files={images}
-            labelIdle="+"
-            onUpdateFiles={setImages}
-            name="image"
-            allowMultiple={true}
-            maxFiles={3}
-            allowReorder={true}
-          />
-        </div>
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="description"
-            className="block font-[500] text-[14px] text-black mb-[5px]"
-          >
-            Mô tả chi tiết
-          </label>
-          <EditorMCE editorRef={editorRef} id="description" />
-        </div>
-        <div className="sm:col-span-2">
-          <button className="bg-[#0088FF] rounded-[4px] h-[48px] px-[20px] font-[700] text-[16px] text-white cursor-pointer">
-            Cập nhật
-          </button>
-        </div>
-      </form>
+      {jobDetail && (
+        <form
+          action=""
+          id="jobEditForm"
+          onSubmit={handleSubmit}
+          className="grid sm:grid-cols-2 grid-cols-1 gap-x-[20px] gap-y-[15px]"
+        >
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="title"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Tên công việc *
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+              defaultValue={jobDetail.title}
+            />
+          </div>
+          <div className="">
+            <label
+              htmlFor="salaryMin"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Mức lương tối thiểu ($)
+            </label>
+            <input
+              type="number"
+              name="salaryMin"
+              id="salaryMin"
+              className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+              defaultValue={jobDetail.salaryMin}
+            />
+          </div>
+          <div className="">
+            <label
+              htmlFor="salaryMax"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Mức lương tối đa ($)
+            </label>
+            <input
+              type="number"
+              name="salaryMax"
+              id="salaryMax"
+              className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+              defaultValue={jobDetail.salaryMax}
+            />
+          </div>
+          <div className="">
+            <label
+              htmlFor="position"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Cấp bậc
+            </label>
+            <select
+              name="position"
+              id="position"
+              className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+              defaultValue={jobDetail.position}
+            >
+              {positionList.map((item: any, index: number) => (
+                <option value={item.value} key={index}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="">
+            <label
+              htmlFor="workingForm"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Hình thức làm việc
+            </label>
+            <select
+              name="workingForm"
+              id="workingForm"
+              className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+              defaultValue={jobDetail.workingForm}
+            >
+              {workingFormList.map((item: any, index: number) => (
+                <option value={item.value} key={index}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="technologies"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Các công nghệ
+            </label>
+            <input
+              type="text"
+              name="technologies"
+              id="technologies"
+              className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
+              defaultValue={jobDetail.technologies.join(", ")}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="images"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Danh sách ảnh
+            </label>
+            <FileUpload
+              files={images}
+              labelIdle="+"
+              onUpdateFiles={setImages}
+              name="image"
+              allowMultiple={true}
+              maxFiles={3}
+              allowReorder={true}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="description"
+              className="block font-[500] text-[14px] text-black mb-[5px]"
+            >
+              Mô tả chi tiết
+            </label>
+            <EditorMCE
+              editorRef={editorRef}
+              id="description"
+              value={jobDetail.description}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <button className="bg-[#0088FF] rounded-[4px] h-[48px] px-[20px] font-[700] text-[16px] text-white cursor-pointer">
+              Cập nhật
+            </button>
+          </div>
+        </form>
+      )}
     </>
   );
 };
