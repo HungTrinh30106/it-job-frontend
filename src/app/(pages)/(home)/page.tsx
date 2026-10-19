@@ -1,7 +1,23 @@
+"use client";
+
 import { CardCompany } from "@/app/components/card/CardCompany";
 import { Section1 } from "@/app/components/section/Section1";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Page() {
+  const [companyList, setCompanyList] = useState([]);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItem=12`, {})
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == "success") {
+          setCompanyList(data.companyList);
+        }
+      });
+  }, []);
+
   return (
     <>
       {/* Section 1 */}
@@ -15,15 +31,9 @@ export default function Page() {
             Nhà tuyển dụng hàng đầu
           </h2>
           <div className="grid lg:grid-cols-3 grid-cols-2 sm:gap-x-[20px] gap-x-[10px] gap-y-[20px]">
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
-            <CardCompany />
+            {companyList.map((item: any, index) => (
+              <CardCompany key={index} item={item} />
+            ))}
           </div>
         </div>
       </div>
