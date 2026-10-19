@@ -1,7 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 export const Section1 = () => {
+  const router = useRouter();
+  const handelSubmit = (e: any) => {
+    e.preventDefault();
+
+    const keyword = e.target.city.value;
+    const city = e.target.keyword.value;
+
+    router.push(`/search?keyword=${keyword}&city=${city}`);
+  };
+
   return (
     <>
       {/* Section 1 */}
@@ -12,23 +25,26 @@ export const Section1 = () => {
           </h1>
           <form
             action=""
+            onSubmit={handelSubmit}
             className="flex gap-x-[15px] gap-y-[10px] md:flex-nowrap flex-wrap"
           >
             <select
-              name=""
+              name="city"
               id=""
               className="md:w-[240px] w-full h-[56px] rounded-[4px] px-[20px] bg-white font-[500] text-[16px] text-[#121212]"
             >
               <option value="">Tất cả thành phố</option>
-              <option value="">Hà Nội</option>
-              <option value="">Đà Nẵng</option>
+              <option value="Hà Nội">Hà Nội</option>
+              <option value="Đà Nẵng">Đà Nẵng</option>
+              <option value="Hồ Chí Minh">TP HCM</option>
             </select>
             <input
               type="text"
+              name="keyword"
               placeholder="Nhập từ khóa..."
               className="flex-1 px-[20px] h-[56px] rounded-[4px] bg-white font-[500] text-[16px] text-[#121212]"
             />
-            <button className="md:w-[240px] w-full bg-[#0088FF] h-[56px] flex gap-[10px] items-center justify-center rounded-[4px] font-[500] text-[16px] text-white">
+            <button className="md:w-[240px] w-full bg-[#0088FF] h-[56px] flex gap-[10px] items-center justify-center rounded-[4px] font-[500] text-[16px] text-white cursor-pointer">
               <FaMagnifyingGlass className="text-[20px]" /> TÌm kiếm
             </button>
           </form>
@@ -38,19 +54,19 @@ export const Section1 = () => {
             </div>
             <div className="flex flex-wrap gap-[10px]">
               <Link
-                href=""
+                href="/search?language=ReactJS"
                 className="bg-[#121212] hover:bg-[#414042] font-[500] text-[16px] text-[#DEDEDE] border-[1px] border-[#414042] rounded-[20px] py-[8px] px-[22px] hover:text-white"
               >
                 ReactJS
               </Link>
               <Link
-                href=""
+                href="/search?language=Javascript"
                 className="bg-[#121212] hover:bg-[#414042] font-[500] text-[16px] text-[#DEDEDE] border-[1px] border-[#414042] rounded-[20px] py-[8px] px-[22px] hover:text-white"
               >
                 Javascript
               </Link>
               <Link
-                href=""
+                href="/search?language=NoteJS"
                 className="bg-[#121212] hover:bg-[#414042] font-[500] text-[16px] text-[#DEDEDE] border-[1px] border-[#414042] rounded-[20px] py-[8px] px-[22px] hover:text-white"
               >
                 NoteJS
