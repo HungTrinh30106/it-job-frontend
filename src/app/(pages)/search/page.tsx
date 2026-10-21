@@ -11,10 +11,11 @@ export default function Page() {
   const params = useSearchParams();
   const language = params.get("language") || "";
   const city = params.get("city") || "";
+  const company = params.get("company") || "";
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}`,
     )
       .then((res) => res.json())
       .then((data) => {
@@ -25,7 +26,7 @@ export default function Page() {
           setJobList(data.jobs);
         }
       });
-  }, [language, city]);
+  }, [language, city, company]);
 
   return (
     <>
@@ -37,7 +38,7 @@ export default function Page() {
       <div className="py-[60px]">
         <div className="contain">
           <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
-            {jobList.length} việc làm tại
+            {jobList.length} việc làm
             <span className="text-[#0088FF]"> {city}</span>
           </h2>
           <div className="filter bg-white rounded-[8px] flex flex-wrap items-center gap-[12px] py-[10px] px-[20px] mb-[30px]">

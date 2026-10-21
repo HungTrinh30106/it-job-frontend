@@ -49,6 +49,7 @@ export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
         { name: "MB Bank", link: "/search?company=MB Bank" },
         { name: "Vingroup", link: "/search?company=Vingroup" },
         { name: "Viettel", link: "/search?company=Viettel" },
+        { name: "1 mình tao", link: "/search?company=1 mình tao" },
       ],
     },
     ...(!isLogin
