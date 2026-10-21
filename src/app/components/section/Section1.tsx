@@ -66,10 +66,10 @@ export const Section1 = () => {
                 Javascript
               </Link>
               <Link
-                href="/search?language=NoteJS"
+                href="/search?language=NodeJS"
                 className="bg-[#121212] hover:bg-[#414042] font-[500] text-[16px] text-[#DEDEDE] border-[1px] border-[#414042] rounded-[20px] py-[8px] px-[22px] hover:text-white"
               >
-                NoteJS
+                NodeJS
               </Link>
             </div>
           </div>

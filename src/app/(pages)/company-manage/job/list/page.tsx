@@ -93,7 +93,7 @@ export default function Page() {
                       <FaUserTie className="text-[16px]" /> {position?.label}
                     </div>
                     <div className="flex items-center justify-center gap-x-[8px] mb-[6px] font-[400] text-[14px] text-[#121212]">
-                      <FaBriefcase className="text-[16px]" />{" "}
+                      <FaBriefcase className="text-[16px]" />
                       {workingForm?.label}
                     </div>
                     <div className="mt-[12px] flex flex-wrap items-center justify-center gap-[8px]">

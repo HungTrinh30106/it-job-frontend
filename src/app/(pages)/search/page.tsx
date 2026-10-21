@@ -1,7 +1,29 @@
+"use client";
+
 import { CardJob } from "@/app/components/card/CardJob";
 import { Section1 } from "@/app/components/section/Section1";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Page() {
+  const [jobList, setJobList] = useState<any>([]);
+  const params = useSearchParams();
+  const language = params.get("language") || "";
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == "error") {
+          toast.error(data.message);
+        }
+        if (data.code == "success") {
+          setJobList(data.jobs);
+        }
+      });
+  }, [language]);
+
   return (
     <>
       {/* Section 1 */}
@@ -12,7 +34,8 @@ export default function Page() {
       <div className="py-[60px]">
         <div className="contain">
           <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
-            76 việc làm <span className="text-[#0088FF]">reactjs</span>
+            {jobList.length} việc làm{" "}
+            <span className="text-[#0088FF]">{language}</span>
           </h2>
           <div className="filter bg-white rounded-[8px] flex flex-wrap items-center gap-[12px] py-[10px] px-[20px] mb-[30px]">
             <select
@@ -40,9 +63,9 @@ export default function Page() {
             </select>
           </div>
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
-            <CardJob />
-            <CardJob />
-            <CardJob />
+            {jobList.map((item: any) => (
+              <CardJob key={item.id} item={item} />
+            ))}
           </div>
           <div className="mt-[30px]">
             <select
