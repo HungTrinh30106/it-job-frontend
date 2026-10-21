@@ -9,10 +9,10 @@ export const Section1 = () => {
   const handelSubmit = (e: any) => {
     e.preventDefault();
 
-    const keyword = e.target.city.value;
-    const city = e.target.keyword.value;
+    const city = e.target.city.value;
+    const keyword = e.target.keyword.value;
 
-    router.push(`/search?keyword=${keyword}&city=${city}`);
+    router.push(`/search?city=${city}&keyword=${keyword}`);
   };
 
   return (

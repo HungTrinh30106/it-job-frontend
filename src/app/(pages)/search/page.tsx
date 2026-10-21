@@ -10,9 +10,12 @@ export default function Page() {
   const [jobList, setJobList] = useState<any>([]);
   const params = useSearchParams();
   const language = params.get("language") || "";
+  const city = params.get("city") || "";
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}`)
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}`,
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.code == "error") {
@@ -22,7 +25,7 @@ export default function Page() {
           setJobList(data.jobs);
         }
       });
-  }, [language]);
+  }, [language, city]);
 
   return (
     <>
@@ -34,8 +37,8 @@ export default function Page() {
       <div className="py-[60px]">
         <div className="contain">
           <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
-            {jobList.length} việc làm{" "}
-            <span className="text-[#0088FF]">{language}</span>
+            {jobList.length} việc làm tại
+            <span className="text-[#0088FF]"> {city}</span>
           </h2>
           <div className="filter bg-white rounded-[8px] flex flex-wrap items-center gap-[12px] py-[10px] px-[20px] mb-[30px]">
             <select
