@@ -12,10 +12,11 @@ export default function Page() {
   const language = params.get("language") || "";
   const city = params.get("city") || "";
   const company = params.get("company") || "";
+  const keyword = params.get("keyword") || "";
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}`,
     )
       .then((res) => res.json())
       .then((data) => {
@@ -26,7 +27,7 @@ export default function Page() {
           setJobList(data.jobs);
         }
       });
-  }, [language, city, company]);
+  }, [language, city, company, keyword]);
 
   return (
     <>
@@ -39,7 +40,9 @@ export default function Page() {
         <div className="contain">
           <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
             {jobList.length} việc làm
-            <span className="text-[#0088FF]"> {city}</span>
+            <span className="text-[#0088FF]">
+              {language} {city} {company} {keyword}
+            </span>
           </h2>
           <div className="filter bg-white rounded-[8px] flex flex-wrap items-center gap-[12px] py-[10px] px-[20px] mb-[30px]">
             <select
