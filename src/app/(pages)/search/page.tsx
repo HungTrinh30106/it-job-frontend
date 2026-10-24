@@ -2,21 +2,26 @@
 
 import { CardJob } from "@/app/components/card/CardJob";
 import { Section1 } from "@/app/components/section/Section1";
-import { useSearchParams } from "next/navigation";
+import { positionList, workingFormList } from "@/config/variable";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Page() {
   const [jobList, setJobList] = useState<any>([]);
   const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const language = params.get("language") || "";
   const city = params.get("city") || "";
   const company = params.get("company") || "";
   const keyword = params.get("keyword") || "";
+  const position = params.get("position") || "";
+  const workingForm = params.get("workingForm") || "";
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}`,
     )
       .then((res) => res.json())
       .then((data) => {
@@ -27,7 +32,28 @@ export default function Page() {
           setJobList(data.jobs);
         }
       });
-  }, [language, city, company, keyword]);
+  }, [language, city, company, keyword, position, workingForm]);
+
+  const handleFilter = (e: any, name: string) => {
+    const value = e.target.value;
+
+    // 1. Tạo bản sao của search params hiện tại
+    const current = new URLSearchParams(Array.from(params.entries()));
+
+    // 2. Cập nhật hoặc thêm params 'page'
+    if (!value) {
+      current.delete(name);
+    } else {
+      current.set(name, value);
+    }
+
+    // 3. CHuyển đổi thành chuỗi query string
+    const search = current.toString();
+    const query = search ? `?${search}` : "";
+
+    // 4. Chuyển URL mà không load lại trang
+    router.push(`${pathname}${query}`);
+  };
 
   return (
     <>
@@ -46,27 +72,32 @@ export default function Page() {
           </h2>
           <div className="filter bg-white rounded-[8px] flex flex-wrap items-center gap-[12px] py-[10px] px-[20px] mb-[30px]">
             <select
+              onChange={(e) => handleFilter(e, "position")}
               name=""
               id=""
               className="px-[18px] py-[8px] rounded-[20px] border-[1px] border-[#DEDEDE] font-[400] text-[16px] text-[#414042]"
+              defaultValue={position}
             >
               <option value="">Cấp bậc</option>
-              <option value="">Intern</option>
-              <option value="">Fresher</option>
-              <option value="">Junior</option>
-              <option value="">Middle</option>
-              <option value="">Senior</option>
-              <option value="">Manager</option>
+              {positionList.map((item: any, index: number) => (
+                <option key={index} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </select>
             <select
+              onChange={(e) => handleFilter(e, "workingForm")}
               name=""
               id=""
               className="px-[18px] py-[8px] rounded-[20px] border-[1px] border-[#DEDEDE] font-[400] text-[16px] text-[#414042]"
+              defaultValue={workingForm}
             >
               <option value="">Hình thức làm việc</option>
-              <option value="">Tại văn phòng</option>
-              <option value="">Làm từ xa</option>
-              <option value="">Linh hoạt</option>
+              {workingFormList.map((item: any, index: number) => (
+                <option key={index} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </select>
           </div>
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
