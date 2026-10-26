@@ -1,6 +1,7 @@
 "use client";
 
 import { CardJob } from "@/app/components/card/CardJob";
+import { Pagination } from "@/app/components/pagination/Pagination";
 import { Section1 } from "@/app/components/section/Section1";
 import { positionList, workingFormList } from "@/config/variable";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -18,10 +19,12 @@ export default function Page() {
   const keyword = params.get("keyword") || "";
   const position = params.get("position") || "";
   const workingForm = params.get("workingForm") || "";
+  const [pagination, setPagination] = useState<any>(null);
+  const page = params.get("page") || "1";
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}&page=${page}`,
     )
       .then((res) => res.json())
       .then((data) => {
@@ -30,9 +33,10 @@ export default function Page() {
         }
         if (data.code == "success") {
           setJobList(data.jobs);
+          setPagination(data.pagination);
         }
       });
-  }, [language, city, company, keyword, position, workingForm]);
+  }, [language, city, company, keyword, position, workingForm, page]);
 
   const handleFilter = (e: any, name: string) => {
     const value = e.target.value;
@@ -65,7 +69,7 @@ export default function Page() {
       <div className="py-[60px]">
         <div className="contain">
           <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
-            {jobList.length} việc làm
+            {pagination ? pagination.totalRecord : 0} việc làm
             <span className="text-[#0088FF]">
               {language} {city} {company} {keyword}
             </span>
@@ -105,17 +109,10 @@ export default function Page() {
               <CardJob key={item.id} item={item} />
             ))}
           </div>
-          <div className="mt-[30px]">
-            <select
-              name=""
-              id=""
-              className="rounded-[8px] border-[1px] border-[#DEDEDE] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
-            >
-              <option value="">Trang 1</option>
-              <option value="">Trang 2</option>
-              <option value="">Trang 3</option>
-            </select>
-          </div>
+          <Pagination
+            pagination={pagination}
+            totalItemInPage={jobList.length}
+          />
         </div>
       </div>
       {/* End Kết quả tìm kiếm */}
