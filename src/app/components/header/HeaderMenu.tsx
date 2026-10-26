@@ -10,8 +10,12 @@ type MenuItem = {
   children?: MenuItem[];
 };
 
-export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
-  const { openMenu, isLogin } = props;
+export const HeaderMenu = (props: {
+  openMenu: boolean;
+  isLogin: boolean;
+  menuRef: React.RefObject<HTMLElement | null>;
+}) => {
+  const { openMenu, isLogin, menuRef } = props;
 
   const menuList: MenuItem[] = [
     {
@@ -42,7 +46,7 @@ export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
     },
     {
       name: "Top công ty IT",
-      link: "#",
+      link: "/company/list",
       children: [
         { name: "FPT Software", link: "/search?company=FPT Software" },
         { name: "Techcombank", link: "/search?company=Techcombank" },
@@ -85,6 +89,7 @@ export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
 
     return (
       <li
+        onMouseLeave={() => setIsOpenMobile(false)}
         className={`
           relative group transition-all duration-200
           ${/* CSS dành cho Desktop (lg trở lên) */ ""}
@@ -118,6 +123,7 @@ export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
           {hasChildren && (
             <button
               type="button"
+              onMouseEnter={() => setIsOpenMobile(true)}
               className="p-1 text-white focus:outline-none"
               aria-label="Toggle Submenu"
             >
@@ -170,6 +176,7 @@ export const HeaderMenu = (props: { openMenu: boolean; isLogin: boolean }) => {
 
   return (
     <nav
+      ref={menuRef}
       className={`
         /* Style màn hình Mobile (Sidebar Drawer có hiệu ứng trượt nhẹ và cuộn trang) */
         fixed top-0 left-0 z-50 w-[280px] h-full bg-[#000065] shadow-2xl overflow-y-auto p-4
