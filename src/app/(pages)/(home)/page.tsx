@@ -3,7 +3,6 @@
 import { CardCompany } from "@/app/components/card/CardCompany";
 import { Section1 } from "@/app/components/section/Section1";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export default function Page() {
   const [companyList, setCompanyList] = useState([]);
