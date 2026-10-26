@@ -11,7 +11,7 @@ export const CardCompany = (props: { item: any }) => {
           <div className="sm:pt-[32px] pt-[20px] sm:px-[16px] px-[8x] sm:pb-[24px] pb-[16px] inner-body">
             <div className="sm:w-[160px] w-[125px] aspect-square rounded-[8px] bg-white mx-auto flex items-center justify-center inner-image mb-[24px]">
               <img
-                src="/assets/images/demo-cong-ty-1.png"
+                src={item.logo}
                 alt={item.companyName}
                 className="p-[10px] w-full h-full object-contain"
               />

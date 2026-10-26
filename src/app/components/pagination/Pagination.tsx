@@ -41,7 +41,7 @@ export const Pagination = (props: {
           <select
             onChange={handlePagination}
             className="bg-white border-[1px] border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
-            defaultValue={pagination.currentPage}
+            value={pagination.currentPage}
           >
             {Array(pagination.totalPage)
               .fill("")

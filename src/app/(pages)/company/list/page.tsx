@@ -1,21 +1,28 @@
 "use client";
 import { CardCompany } from "@/app/components/card/CardCompany";
+import { Pagination } from "@/app/components/pagination/Pagination";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [companyList, setCompanyList] = useState([]);
+  const [pagination, setPagination] = useState<any>(null);
+  const params = useSearchParams();
+  const page = params.get("page") || "1";
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItem=12`, {})
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItem=2&page=${page}`,
+      {},
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.code == "success") {
           setCompanyList(data.companyList);
+          setPagination(data.pagination);
         }
       });
-  }, []);
-
-  console.log(companyList);
+  }, [page]);
 
   return (
     <>
@@ -30,17 +37,10 @@ export default function Page() {
               <CardCompany key={index} item={item} />
             ))}
           </div>
-          <div className="mt-[30px]">
-            <select
-              name=""
-              id=""
-              className="bg-white border-[1px] border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
-            >
-              <option value="">Trang 1</option>
-              <option value="">Trang 2</option>
-              <option value="">Trang 3</option>
-            </select>
-          </div>
+          <Pagination
+            pagination={pagination}
+            totalItemInPage={companyList.length}
+          />
         </div>
       </div>
       {/* End Section 2 */}
