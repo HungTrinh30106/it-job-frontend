@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa6";
 import { toast } from "sonner";
 import { positionList, workingFormList } from "@/config/variable";
+import { ApplyForm } from "./ApplyForm";
 
 export const Detail = (props: { id: string }) => {
   const { id } = props;
@@ -101,64 +102,7 @@ export const Detail = (props: { id: string }) => {
                   <h2 className="font-[700] text-[20px] text-[#000000] mb-[20px]">
                     Ứng tuyển ngay
                   </h2>
-                  <form action="" className="grid gap-[15px]">
-                    <div className="">
-                      <label
-                        htmlFor="fullName"
-                        className="font-[500] text-[14px] text-black mb-[5px] block"
-                      >
-                        Họ tên *
-                      </label>
-                      <input
-                        type="text"
-                        id="fullName"
-                        className="w-full h-[46px] rounded-[4px] border border-[#DEDEDE] px-[20px] font-[500] text-[14px] text-black"
-                      />
-                    </div>
-                    <div className="">
-                      <label
-                        htmlFor="email"
-                        className="font-[500] text-[14px] text-black mb-[5px] block"
-                      >
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="w-full h-[46px] rounded-[4px] border border-[#DEDEDE] px-[20px] font-[500] text-[14px] text-black"
-                      />
-                    </div>
-                    <div className="">
-                      <label
-                        htmlFor="phone"
-                        className="font-[500] text-[14px] text-black mb-[5px] block"
-                      >
-                        Số điện thoại *
-                      </label>
-                      <input
-                        type="text"
-                        id="phone"
-                        className="w-full h-[46px] rounded-[4px] border border-[#DEDEDE] px-[20px] font-[500] text-[14px] text-black"
-                      />
-                    </div>
-                    <div className="">
-                      <label
-                        htmlFor="fileCV"
-                        className="font-[500] text-[14px] text-black mb-[5px] block"
-                      >
-                        File CV dạng PDF *
-                      </label>
-                      <input
-                        type="file"
-                        id="fileCV"
-                        accept="application/pdf"
-                        className="w-full h-[46px] rounded-[4px] border border-[#DEDEDE] px-[20px] font-[500] text-[14px] text-black"
-                      />
-                    </div>
-                    <button className="flex items-center justify-center h-[48px] rounded-[4px] bg-[#0088FF] font-[700] text-[16px] text-white mb-[20px] cursor-pointer">
-                      Gửi CV ứng tuyển
-                    </button>
-                  </form>
+                  <ApplyForm jobId={id} />
                 </div>
               </div>
               {/* Right */}

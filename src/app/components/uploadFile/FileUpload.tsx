@@ -17,6 +17,7 @@ interface FileUploadProps {
   allowMultiple?: boolean;
   maxFiles?: number | null;
   allowReorder?: boolean;
+  required?: boolean;
 }
 
 export const FileUpload = ({
@@ -28,6 +29,7 @@ export const FileUpload = ({
   allowMultiple = false,
   maxFiles = null,
   allowReorder = false,
+  required = false,
 }: FileUploadProps) => {
   return (
     <FilePond
@@ -39,6 +41,7 @@ export const FileUpload = ({
       allowMultiple={allowMultiple}
       maxFiles={maxFiles}
       allowReorder={allowReorder}
+      required={required}
     />
   );
 };
