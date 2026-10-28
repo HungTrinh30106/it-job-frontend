@@ -17,14 +17,14 @@ import {
 import { toast } from "sonner";
 
 export default function Page() {
-  const [cvList, setCvList] = useState([]);
+  const [cvList, setCvList] = useState<any>([]);
   const [pagination, setPagination] = useState<any>(null);
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || "1";
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/cv/list?page=${page}`, {
-      credentials: "include", // Gửi kèm cookie
+      credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
     })
       .then((res) => res.json())
       .then((data) => {
@@ -106,7 +106,7 @@ export default function Page() {
                     </div>
                     <div className="mt-[20px] flex justify-center flex-wrap gap-[8px]">
                       <Link
-                        href="#"
+                        href={`/company-manage/cv/detail/${item.id}`}
                         className="bg-[#0088FF] text-white rounded-[4px] py-[8px] px-[20px] font-[400] text-[14px] inline-block"
                       >
                         Xem
