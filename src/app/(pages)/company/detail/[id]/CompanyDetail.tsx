@@ -29,8 +29,7 @@ export const CompanyDetail = (props: { id: string }) => {
 
   return (
     <>
-      if (companyDetail && jobList)
-      {
+      {companyDetail && jobList && (
         <div className="pt-[30px] pb-[60px]">
           <div className="contain">
             <div className="border-[1px] border-[#DEDEDE] rounded-[8px] p-[20px] bg-white">
@@ -102,7 +101,7 @@ export const CompanyDetail = (props: { id: string }) => {
             </div>
           </div>
         </div>
-      }
+      )}
     </>
   );
 };
