@@ -59,7 +59,10 @@ export function Detail(props: { id: string }) {
                 File CV:
               </div>
               <div className="bg-[#D9D9D9] w-full h-[736px]">
-                Preview File CV dạng PDF tại đây
+                <iframe
+                  src={cvDetail.fileCV}
+                  className="w-full h-full"
+                ></iframe>
               </div>
             </div>
             <div className="border border-[#DEDEDE] rounded-[8px] p-[20px] mt-[20px]">

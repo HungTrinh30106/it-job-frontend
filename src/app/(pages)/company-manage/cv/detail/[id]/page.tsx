@@ -10,7 +10,11 @@ export default async function Page({
   return (
     <>
       {/* Chi tiết CV */}
-      <Detail id={id} />
+      <div className="py-[60px]">
+        <div className="contain">
+          <Detail id={id} />
+        </div>
+      </div>
       {/* Hết Chi tiết CV */}
     </>
   );

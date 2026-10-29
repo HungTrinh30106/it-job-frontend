@@ -33,7 +33,7 @@ export const HeaderAccount = (props: {
     },
     {
       name: "Quản lý CV đã gửi",
-      link: "/user-manage/resumes",
+      link: "/user-manage/cv/list",
     },
     {
       name: "Đăng xuất",
