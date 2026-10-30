@@ -13,6 +13,7 @@ export default function Page() {
   const [pagination, setPagination] = useState<any>(null);
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || "1";
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/cv/list?page=${page}`, {
@@ -28,7 +29,27 @@ export default function Page() {
           setPagination(data.pagination);
         }
       });
-  }, [page]);
+  }, [page, count]);
+
+  const handleDelete = (id: any) => {
+    const isConfirm = confirm("Bạn có chắc chắn muốn xóa cv này?");
+    if (isConfirm) {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/cv/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include", // Giữ và cho phép gửi cookie từ frontend lên backend
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "error") {
+            toast.error(data.message);
+          }
+          if (data.code == "success") {
+            toast.success(data.message);
+            setCount(count + 1);
+          }
+        });
+    }
+  };
 
   return (
     <>
@@ -81,17 +102,17 @@ export default function Page() {
                       </div>
                       <div className="mt-[20px] flex justify-center flex-wrap gap-[8px]">
                         <Link
-                          href="#"
+                          href={`/user-manage/cv/detail/${item.id}`}
                           className="bg-[#0088FF] text-white rounded-[4px] py-[8px] px-[20px] font-[400] text-[14px] inline-block"
                         >
                           Xem
                         </Link>
-                        <Link
-                          href="#"
-                          className="bg-[#FF0000] text-white rounded-[4px] py-[8px] px-[20px] font-[400] text-[14px] inline-block"
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="bg-[#FF0000] text-white rounded-[4px] py-[8px] px-[20px] font-[400] text-[14px] inline-block cursor-pointer"
                         >
                           Xóa
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
