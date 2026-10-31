@@ -4,7 +4,7 @@ import { Pagination } from "@/app/components/pagination/Pagination";
 import { cvStatusList, positionList, workingFormList } from "@/config/variable";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   FaBriefcase,
   FaCalendar,
@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa6";
 import { toast } from "sonner";
 
-export default function Page() {
+function PageContent() {
   const [cvList, setCvList] = useState<any>([]);
   const [pagination, setPagination] = useState<any>(null);
   const searchParams = useSearchParams();
@@ -195,5 +195,13 @@ export default function Page() {
       </div>
       {/* Hết Quản lý công việc */}
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="py-[60px] text-center">Đang tải...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }

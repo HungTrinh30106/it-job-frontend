@@ -5,10 +5,10 @@ import { Pagination } from "@/app/components/pagination/Pagination";
 import { Section1 } from "@/app/components/section/Section1";
 import { positionList, workingFormList } from "@/config/variable";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function Page() {
+function PageContent() {
   const [jobList, setJobList] = useState<any>([]);
   const params = useSearchParams();
   const router = useRouter();
@@ -117,5 +117,13 @@ export default function Page() {
       </div>
       {/* End Kết quả tìm kiếm */}
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="py-[60px] text-center">Đang tải...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }

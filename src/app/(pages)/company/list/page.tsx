@@ -2,9 +2,9 @@
 import { CardCompany } from "@/app/components/card/CardCompany";
 import { Pagination } from "@/app/components/pagination/Pagination";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function Page() {
+function PageContent() {
   const [companyList, setCompanyList] = useState([]);
   const [pagination, setPagination] = useState<any>(null);
   const params = useSearchParams();
@@ -45,5 +45,13 @@ export default function Page() {
       </div>
       {/* End Section 2 */}
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="py-[60px] text-center">Đang tải...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }
